@@ -1,0 +1,10 @@
+---
+
+- name: create server key & cert
+  shell: certified --password="{{ pki_password }}" --db={{ pki_db_path }} 
+         CN="{{ item.cn }}" {% if item.extra_cn is defined %}{% for c in item.extra_cn %}+"{{ c }}"  {% endfor %}{% endif %}
+         creates={{ pki_db_path }}/certs/{{ item.cn }}.crt
+  with_items: pki_server_certs
+  tags:
+    - pki
+    - server-cert

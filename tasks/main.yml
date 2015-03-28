@@ -1,0 +1,2 @@
+- include: init_ca.yml
+- include: gen_server_certs.yml

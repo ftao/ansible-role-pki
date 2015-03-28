@@ -1,0 +1,31 @@
+---
+
+- name: make sure pki db path exists
+  file: path="{{ pki_db_path }}" state=directory
+  tags:
+    - pki
+
+- name: init pki db git
+  shell: git init {{ pki_db_path }}
+         creates={{ pki_db_path}}/.git
+  tags:
+    - pki
+
+- name: config git
+  shell: "git config user.{{ item.key }} '{{ item.value }}'
+         chdir={{ pki_db_path }}"
+  with_items:
+    - {"key" : "email", "value" : "pki@localdomain.localhost"}
+    - {"key" : "name", "value" : "pki user"}
+  tags:
+    - pki
+    - ca
+
+- name: init ca 
+  shell: certified-ca --password="{{ pki_password }}" --db={{ pki_db_path }} 
+         C="{{ pki_ca_c }}" ST="{{ pki_ca_st }}" L="{{ pki_ca_l }}" O="{{ pki_ca_o }}" 
+         CN="{{ pki_ca_cn }}"
+         creates={{ pki_db_path }}/certs/ca.crt
+  tags:
+    - pki
+    - ca

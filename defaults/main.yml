@@ -1,0 +1,15 @@
+---
+
+pki_db_path: /opt/pki
+pki_password: "18e1687b84fdaf4a656645256a10ef17"
+pki_ca_c: "US"
+pki_ca_l: "SFO"
+pki_ca_st: "CA"
+pki_ca_o: "IT"
+pki_ca_cn: "pki"
+
+pki_server_certs: 
+ - cn: "pkitest.example.com"
+   extra_cn: 
+     - "*.pkitest.exmaple.com"
+     - "127.0.0.1"
