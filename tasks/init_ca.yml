@@ -15,11 +15,15 @@
     - pki
 
 - name: config git
-  shell: "git config user.{{ item.key }} '{{ item.value }}'
-         chdir={{ pki_db_path }}"
+  lineinfile: dest={{ pki_db_path}}/.git/config 
+              line="{{ item.line }}" 
+              regexp="{{ item.regexp }}"
+              insertafter="{{ item.after }}"
+              create=yes
   with_items:
-    - {"key" : "email", "value" : "pki@localdomain.localhost"}
-    - {"key" : "name", "value" : "pki user"}
+    - {"regexp" : "\\[user\\]", "line" : "[user]", "after" : "EOF"}
+    - {"regexp" : "email", "line" :  "\temail = pki@localdomain.localhost", "after" : "\\[user\\]"}
+    - {"regexp" : "name", "line" :  "\tname = pki user", "after" : "email"}
   tags:
     - pki
     - ca
